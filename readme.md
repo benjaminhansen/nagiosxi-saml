@@ -13,3 +13,9 @@ Uses OneLogin's php-saml library to provide SAML connectivity and features.
 * Provide values for your SSO provider under the "Identity Provider (SSO) Setting" section
 * Use the values under the "Service Provider (SP) Values" section to configure the application in your IDP
 * Click Apply Settings
+
+## Authentication Providers
+This component has only been tested with Azure AD and SimpleSAMLphp as Identity Providers, but it should work just fine with any other providers that support SAML 2.0.
+
+## Gotchas and Caveats
+* Users must be pre-populated in the NagiosXI interface, either by hand or via the out-of-box Active Directory/LDAP integration. Just-in-time (JIT) user provisioning is not available, yet...
