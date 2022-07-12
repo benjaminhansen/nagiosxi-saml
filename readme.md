@@ -24,3 +24,4 @@ This component has only been tested with Azure AD and SimpleSAMLphp as Identity 
 ## Future Features
 * Just-in-time provisioning. Create new users and permissions automatically when logging in for the first time.
 * Add a "Sign in with SAML" button to the default login page. Should be able to by styled with a logo and/or brand colors.
+* Parse the IDP's metadata URL to populate the remaining fields automatically.

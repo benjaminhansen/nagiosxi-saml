@@ -6,22 +6,24 @@ require_once(dirname(__FILE__) . '/../componenthelper.inc.php');
 // Testing the inclusion of the common include
 require_once(dirname(__FILE__) . '../../../common.inc.php');
 
+// let's do this...
 samlauthentication_component_init();
 
 function samlauthentication_component_init() {
     // information to pass to xi about our component
     $args = array(
-        COMPONENT_NAME =>           "samlauthentication",
-        COMPONENT_VERSION =>        "1.0",
-        COMPONENT_AUTHOR =>         "BJ Hansen <bjhansen@ualr.edu>",
-        COMPONENT_DESCRIPTION =>    "SAML Authentication Component for Nagios XI",
-        COMPONENT_CONFIGFUNCTION => "saml_config_func",
-        COMPONENT_TITLE =>          "SAML Authentication"
-        );
+        COMPONENT_NAME              => "samlauthentication",
+        COMPONENT_VERSION           => "1.0",
+        COMPONENT_AUTHOR            => "BJ Hansen <bjhansen@ualr.edu>",
+        COMPONENT_DESCRIPTION       => "SAML Authentication Component for Nagios XI",
+        COMPONENT_CONFIGFUNCTION    => "saml_config_func",
+        COMPONENT_TITLE             => "SAML Authentication"
+    );
 
     // register with xi
     register_component("samlauthentication", $args);
 
+    // register the default authentication override
     register_callback(CALLBACK_HEADER_START, 'override_default_authentication');
 }
 
@@ -199,7 +201,6 @@ function saml_config_func($mode = "", $inargs, &$outargs, &$result) {
             $saml_idp_username_attr = grab_array_var($inargs, "saml_idp_username_attr", "");
             $saml_idp_entityid = grab_array_var($inargs, "saml_idp_entityid", "");
             $saml_debug = checkbox_binary(grab_array_var($inargs, "saml_debug", false));
-            $saml_allow_bypass = checkbox_binary(grab_array_var($inargs, "saml_allow_bypass", false));
             $saml_force_sso = checkbox_binary(grab_array_var($inargs, "saml_force_sso", false));
 
             set_option("saml2_enabled", $saml_enabled);
@@ -211,7 +212,6 @@ function saml_config_func($mode = "", $inargs, &$outargs, &$result) {
             set_option("saml2_idp_username_attr", $saml_idp_username_attr);
             set_option("saml2_idp_entityid", $saml_idp_entityid);
             set_option("saml2_force_sso", $saml_force_sso);
-            set_option("saml2_allow_bypass", $saml_allow_bypass);
 
             break;
         default:

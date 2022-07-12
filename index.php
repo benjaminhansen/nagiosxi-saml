@@ -1,9 +1,5 @@
 <?php
 
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 use OneLogin\Saml2\Settings as Saml2Settings;
 use OneLogin\Saml2\Auth as Saml2Auth;
 use OneLogin\Saml2\Error as Saml2Error;
@@ -140,6 +136,7 @@ else if(isset($_GET['acs'])) {
             $_SESSION["session_id"] = user_generate_session();
         }
 
+        // everything looks good! Let the user in! 
         header("Location: {$app_url}index.php");
         return false;
     }
