@@ -18,24 +18,32 @@ require_once(dirname(__FILE__) . '../../../common.inc.php');
 // include the composer autoloader
 require __DIR__."/vendor/autoload.php";
 
+// set up Nagios environment
 pre_init();
 init_session();
 
+// get the app's base url.
+// This is required for the component to function and we will bail out if we don't have it.
 $app_url = get_option('url');
 if(empty($app_url)) {
     die('Unable to retrieve the app url from the database');
 }
 
+// check if the saml component has been enabled via the Admin console
+// if it is not enabled, we will redirect to the default login page
 $saml_enabled = get_option('saml2_enabled', false);
 if(!$saml_enabled) {
     header("Location: {$app_url}login.php");
     return false;
 }
 
+// check if saml debugging has been enabled via the admin console
 $saml_debug = get_option('saml2_debug', false);
 
+// craft the base url of the component, to be used later
 $base_url = "{$app_url}includes/components/samlauthentication/";
 
+// craft the saml settings array for the OneLogin plugin
 $saml2_settings = [
     'debug' => $saml_debug,
 
@@ -61,8 +69,10 @@ $saml2_settings = [
     ),
 ];
 
+// instantiate the Saml2 auth object using the settings array from above
 $auth = new Saml2Auth($saml2_settings);
 
+// metadata
 if(isset($_GET['metadata'])) {
     try {
         $settings = new Saml2Settings($saml2_settings, true);
@@ -82,6 +92,7 @@ if(isset($_GET['metadata'])) {
     }
 }
 
+// assertion consumer service
 else if(isset($_GET['acs'])) {
     if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
         $requestID = $_SESSION['AuthNRequestID'];
@@ -115,14 +126,12 @@ else if(isset($_GET['acs'])) {
     $_SESSION['samlSessionIndex'] = $auth->getSessionIndex();
     unset($_SESSION['AuthNRequestID']);
     if (isset($_POST['RelayState']) && Saml2Utils::getSelfURL() != $_POST['RelayState']) {
-        // To avoid 'Open Redirect' attacks, before execute the
-        // redirection confirm the value of $_POST['RelayState'] is a // trusted URL.
-        // $auth->redirectTo($_POST['RelayState']);
-
         $username = $_SESSION['samlUserdata'][$username_attribute][0];
         $_SESSION["user_id"] = get_user_id($username);
 
         if(is_null($_SESSION["user_id"])) {
+            // TO DO: create the user, then log them in (Just-in-time provisioning)
+            session_destroy();
             die('You are not authorized to log into this service!');
         }
 
@@ -136,6 +145,7 @@ else if(isset($_GET['acs'])) {
     }
 }
 
+// single logout service
 else if(isset($_GET['sls'])) {
     $returnTo = null;
     $parameters = array();
@@ -168,10 +178,12 @@ else if(isset($_GET['sls'])) {
     $auth->logout($returnTo, $parameters, $nameId, $sessionIndex, false, $nameIdFormat, $samlNameIdNameQualifier, $samlNameIdSPNameQualifier);
 }
 
+// single sign-on service
 else if(isset($_GET['sso'])) {
     $auth->login();
 }
 
+// invalid
 else {
     die('Invalid Request!');
 }
