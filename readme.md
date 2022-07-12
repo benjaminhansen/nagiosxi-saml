@@ -19,3 +19,8 @@ This component has only been tested with Azure AD and SimpleSAMLphp as Identity 
 
 ## Gotchas and Caveats
 * Users must be pre-populated in the NagiosXI interface, either by hand or via the out-of-box Active Directory/LDAP integration. Just-in-time (JIT) user provisioning is not available, yet...
+* The "Username Attribute" field, on the SAML Authentication settings page, must map to an attribute that contains the same value that is set in the user's Nagios XI "Username" field (Admin > Manage Users).
+
+## Future Features
+* Just-in-time provisioning. Create new users and permissions automatically when logging in for the first time.
+* Add a "Sign in with SAML" button to the default login page. Should be able to by styled with a logo and/or brand colors.
