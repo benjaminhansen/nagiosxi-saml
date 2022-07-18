@@ -18,6 +18,10 @@ require __DIR__."/vendor/autoload.php";
 pre_init();
 init_session();
 
+function saml_is_enabled() {
+    return get_option('saml2_enabled', false);
+}
+
 // get the app's base url.
 // This is required for the component to function and we will bail out if we don't have it.
 $app_url = get_option('url');
@@ -25,16 +29,11 @@ if(empty($app_url)) {
     die('Unable to retrieve the app url from the database');
 }
 
-// check if the saml component has been enabled via the Admin console
-// if it is not enabled, we will redirect to the default login page
-$saml_enabled = get_option('saml2_enabled', false);
-if(!$saml_enabled) {
-    header("Location: {$app_url}login.php");
-    return false;
-}
-
 // check if saml debugging has been enabled via the admin console
 $saml_debug = get_option('saml2_debug', false);
+
+// check if saml strict mode has been enabled via the admin console
+$saml_strict = get_option('saml2_strict', false);
 
 // craft the base url of the component, to be used later
 $base_url = "{$app_url}includes/components/samlauthentication/";
@@ -42,6 +41,7 @@ $base_url = "{$app_url}includes/components/samlauthentication/";
 // craft the saml settings array for the OneLogin plugin
 $saml2_settings = [
     'debug' => $saml_debug,
+    'strict' => $saml_strict,
 
     'sp' => array (
             'entityId' => $base_url.'?metadata',
@@ -52,6 +52,8 @@ $saml2_settings = [
                 'url' => $base_url.'?sls',
             ),
             'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            'x509cert' => get_option('saml2_sp_public_key'),
+            'privateKey' => get_option('saml2_sp_private_key'),
         ),
     'idp' => array (
         'entityId' => get_option('saml2_idp_entityid'),
@@ -62,6 +64,23 @@ $saml2_settings = [
             'url' => get_option('saml2_idp_sls_url'),
         ),
         'x509cert' => get_option('saml2_idp_x509_cert'),
+    ),
+    'organization' => array(
+        get_option('saml2_organization_locale') => array(
+            'name' => get_option('saml2_organization_name'),
+            'displayname' => get_option('saml2_organization_display_name'),
+            'url' => get_option('saml2_organization_url')
+        )
+    ),
+    'contactPerson' => array(
+        'technical' => array(
+            'givenName' => get_option('saml2_contact_technical_name'),
+            'emailAddress' => get_option('saml2_contact_technical_email')
+        ),
+        'support' => array(
+            'givenName' => get_option('saml2_contact_support_name'),
+            'emailAddress' => get_option('saml2_contact_support_email')
+        ),
     ),
 ];
 
@@ -90,6 +109,11 @@ if(isset($_GET['metadata'])) {
 
 // assertion consumer service
 else if(isset($_GET['acs'])) {
+    if(!saml_is_enabled()) {
+        header("Location: {$app_url}login.php");
+        return false;
+    }
+
     if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
         $requestID = $_SESSION['AuthNRequestID'];
     } else {
@@ -136,7 +160,7 @@ else if(isset($_GET['acs'])) {
             $_SESSION["session_id"] = user_generate_session();
         }
 
-        // everything looks good! Let the user in! 
+        // everything looks good! Let the user in!
         header("Location: {$app_url}index.php");
         return false;
     }
@@ -144,6 +168,11 @@ else if(isset($_GET['acs'])) {
 
 // single logout service
 else if(isset($_GET['sls'])) {
+    if(!saml_is_enabled()) {
+        header("Location: {$app_url}login.php");
+        return false;
+    }
+
     $returnTo = null;
     $parameters = array();
     $nameId = null;
@@ -177,10 +206,20 @@ else if(isset($_GET['sls'])) {
 
 // single sign-on service
 else if(isset($_GET['sso'])) {
+    if(!saml_is_enabled()) {
+        header("Location: {$app_url}login.php");
+        return false;
+    }
+
     $auth->login();
 }
 
 // invalid
 else {
+    if(!saml_is_enabled()) {
+        header("Location: {$app_url}login.php");
+        return false;
+    }
+
     die('Invalid Request!');
 }
