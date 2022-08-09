@@ -82,6 +82,73 @@ $saml2_settings = [
             'emailAddress' => get_option('saml2_contact_support_email')
         ),
     ),
+    'security' => array(
+        // Indicates that the nameID of the <samlp:logoutRequest> sent by this SP
+        // will be encrypted.
+        'nameIdEncrypted' => get_option('saml2_nameid_encrypted', false),
+
+        // Indicates whether the <samlp:AuthnRequest> messages sent by this SP
+        // will be signed.  [Metadata of the SP will offer this info]
+        'authnRequestsSigned' => get_option('saml2_authn_requests_signed', false),
+
+        // Indicates whether the <samlp:logoutRequest> messages sent by this SP
+        // will be signed.
+        'logoutRequestSigned' => get_option('saml2_logout_requests_signed', false),
+
+        // Indicates whether the <samlp:logoutResponse> messages sent by this SP
+        // will be signed.
+        'logoutResponseSigned' => get_option('saml2_logout_responses_signed', false),
+
+        /** signatures and encryptions required **/
+
+        // Indicates a requirement for the <samlp:Response>, <samlp:LogoutRequest>
+        // and <samlp:LogoutResponse> elements received by this SP to be signed.
+        'wantMessagesSigned' => get_option('saml2_want_messages_signed', false),
+
+        // Indicates a requirement for the <saml:Assertion> elements received by
+        // this SP to be encrypted.
+        'wantAssertionsEncrypted' => get_option('saml2_want_assertions_encrypted', false),
+
+        // Indicates a requirement for the <saml:Assertion> elements received by
+        // this SP to be signed. [Metadata of the SP will offer this info]
+        'wantAssertionsSigned' => get_option('saml2_want_assertions_signed', false),
+
+        // Indicates a requirement for the NameID element on the SAMLResponse
+        // received by this SP to be present.
+        'wantNameId' => get_option('saml2_want_nameid', true),
+
+        // Indicates a requirement for the NameID received by
+        // this SP to be encrypted.
+        'wantNameIdEncrypted' => get_option('saml2_want_nameid_encrypted', false),
+
+        // Authentication context.
+        // Set to false and no AuthContext will be sent in the AuthNRequest.
+        // Set true or don't present this parameter and you will get an AuthContext 'exact' 'urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport'.
+        // Set an array with the possible auth context values: array ('urn:oasis:names:tc:SAML:2.0:ac:classes:Password', 'urn:oasis:names:tc:SAML:2.0:ac:classes:X509').
+        'requestedAuthnContext' => get_option('saml2_requested_authn_context', false),
+
+        // Indicates if the SP will validate all received xmls.
+        // (In order to validate the xml, 'strict' and 'wantXMLValidation' must be true).
+        'wantXMLValidation' => get_option('saml2_want_xml_validation', true),
+
+        // If true, SAMLResponses with an empty value at its Destination
+        // attribute will not be rejected for this fact.
+        'relaxDestinationValidation' => get_option('saml2_relax_destination_validation', false),
+
+        // If true, the toolkit will not raised an error when the Statement Element
+        // contain atribute elements with name duplicated
+        'allowRepeatAttributeName' => get_option('saml2_allow_repeat_attribute_name', false),
+
+        // If true, Destination URL should strictly match to the address to
+        // which the response has been sent.
+        // Notice that if 'relaxDestinationValidation' is true an empty Destintation
+        // will be accepted.
+        'destinationStrictlyMatches' => get_option('saml2_destination_strictly_matches', false),
+
+        // If true, SAMLResponses with an InResponseTo value will be rejectd if not
+        // AuthNRequest ID provided to the validation method.
+        'rejectUnsolicitedResponsesWithInResponseTo' => get_option('saml2_reject_unsolicited_responses_with_in_response_to', false),
+    ),
 ];
 
 // instantiate the Saml2 auth object using the settings array from above
