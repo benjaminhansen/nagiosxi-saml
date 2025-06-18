@@ -12,6 +12,7 @@ Uses OneLogin's php-saml library to provide SAML connectivity and features.
   ```bash
     cd <nagiosxi_root>/html/includes/components
     mkdir samlauthentication
+    cd samlauthentication
     composer require benjaminhansen/nagiosxi-saml
   ```
 
