@@ -5,6 +5,17 @@ Adds SAML SSO capabilities to a Nagios XI installation.
 Uses OneLogin's php-saml library to provide SAML connectivity and features.
 
 ## Installing
+
+### With Composer
+* Make sure you have Composer installed on your Nagios XI server. If not, you can install it by following the instructions at https://getcomposer.org/download/
+* Run the following commands on your Nagios XI server:
+  ```bash
+    cd <nagiosxi_root>/html/includes/components
+    mkdir samlauthentication
+    composer require benjaminhansen/nagiosxi-saml
+  ```
+
+### Manually
 * Clone the contents of this repo on your Nagios XI server into the <code><nagiosxi_root>/html/includes/components/samlauthentication</code> directory. You may have to create the <code>samlauthentication</code> directory.
 * Run <code>composer install</code> from inside the <code>samlauthentication</code> directory to install all dependencies
 * Log into your NagiosXI web interface and go to Admin > Manage Components
