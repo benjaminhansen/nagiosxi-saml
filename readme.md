@@ -5,7 +5,7 @@ Adds SAML SSO capabilities to a Nagios XI installation.
 Uses OneLogin's php-saml library to provide SAML connectivity and features.
 
 ## Installing
-* Clone/place the contents of this repo on your Nagios XI server into the <code><nagiosxi_root>/html/includes/components/samlauthentication</code> directory. You will have to create the <code>samlauthentication</code> directory.
+* Clone the contents of this repo on your Nagios XI server into the <code><nagiosxi_root>/html/includes/components/samlauthentication</code> directory. You may have to create the <code>samlauthentication</code> directory.
 * Run <code>composer install</code> from inside the <code>samlauthentication</code> directory to install all dependencies
 * Log into your NagiosXI web interface and go to Admin > Manage Components
 * Look for the "SAML Authentication" component and click on the Edit Setting (wrench) icon
@@ -23,5 +23,5 @@ This component has only been tested with Azure AD and SimpleSAMLphp as Identity 
 
 ## Future Features
 * Just-in-time provisioning. Create new users and permissions automatically when logging in for the first time.
-* Add a "Sign in with SAML" button to the default login page. Should be able to by styled with a logo and/or brand colors.
+* ~~Add a "Sign in with SAML" button to the default login page. Should be able to by styled with a logo and/or brand colors.~~ Completed
 * ~~Parse the IDP's metadata URL to populate the remaining fields automatically.~~ Completed

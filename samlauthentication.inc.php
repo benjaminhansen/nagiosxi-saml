@@ -3,7 +3,7 @@
 // include the xi component helper
 require_once(dirname(__FILE__) . '/../componenthelper.inc.php');
 
-// Testing the inclusion of the common include
+// include the xi common include
 require_once(dirname(__FILE__) . '../../../common.inc.php');
 
 // let's do this...
@@ -11,14 +11,14 @@ samlauthentication_component_init();
 
 function samlauthentication_component_init() {
     // information to pass to xi about our component
-    $args = array(
+    $args = [
         COMPONENT_NAME              => "samlauthentication",
-        COMPONENT_VERSION           => "1.0",
-        COMPONENT_AUTHOR            => "BJ Hansen <bjhansen@ualr.edu>",
+        COMPONENT_VERSION           => "1.1",
+        COMPONENT_AUTHOR            => "BJ Hansen <bjhansen@benjaminhansen.net>",
         COMPONENT_DESCRIPTION       => "SAML Authentication Component for Nagios XI",
         COMPONENT_CONFIGFUNCTION    => "saml_config_func",
         COMPONENT_TITLE             => "SAML Authentication"
-    );
+    ];
 
     // register with xi
     register_component("samlauthentication", $args);

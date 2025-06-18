@@ -1,4 +1,14 @@
 {
+    "name": "benjaminhansen/nagiosxi-saml",
+    "description": "Adds SAML SSO capabilities to a Nagios XI installation.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BJ Hansen",
+            "email": "bjhansen@benjaminhansen.net"
+        }
+    ],
     "require": {
         "onelogin/php-saml": "^4.0"
     }

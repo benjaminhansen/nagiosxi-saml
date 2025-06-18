@@ -8,11 +8,11 @@ use OneLogin\Saml2\Utils as Saml2Utils;
 // include the xi component helper
 require_once(dirname(__FILE__) . '/../componenthelper.inc.php');
 
-// Testing the inclusion of the common include
+// include the xi common include
 require_once(dirname(__FILE__) . '../../../common.inc.php');
 
 // include the composer autoloader
-require __DIR__."/vendor/autoload.php";
+require __DIR__.'/vendor/autoload.php';
 
 // set up Nagios environment
 pre_init();
@@ -41,48 +41,53 @@ $base_url = "{$app_url}includes/components/samlauthentication/";
 // craft the saml settings array for the OneLogin plugin
 $saml2_settings = [
     'debug' => $saml_debug,
+
     'strict' => $saml_strict,
 
-    'sp' => array (
-            'entityId' => $base_url.'?metadata',
-            'assertionConsumerService' => array (
-                'url' => $base_url.'?acs',
-            ),
-            'singleLogoutService' => array (
-                'url' => $base_url.'?sls',
-            ),
-            'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            'x509cert' => get_option('saml2_sp_public_key'),
-            'privateKey' => get_option('saml2_sp_private_key'),
-        ),
-    'idp' => array (
+    'sp' => [
+        'entityId' => "{$base_url}?metadata",
+        'assertionConsumerService' => [
+            'url' => "{$base_url}?acs",
+        ],
+        'singleLogoutService' => [
+            'url' => "{$base_url}?sls",
+        ],
+        'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+        'x509cert' => get_option('saml2_sp_public_key'),
+        'privateKey' => get_option('saml2_sp_private_key'),
+    ],
+
+    'idp' => [
         'entityId' => get_option('saml2_idp_entityid'),
-        'singleSignOnService' => array (
+        'singleSignOnService' => [
             'url' => get_option('saml2_idp_sso_url'),
-        ),
-        'singleLogoutService' => array (
+        ],
+        'singleLogoutService' => [
             'url' => get_option('saml2_idp_sls_url'),
-        ),
+        ],
         'x509cert' => get_option('saml2_idp_x509_cert'),
-    ),
-    'organization' => array(
-        get_option('saml2_organization_locale') => array(
+    ],
+
+    'organization' => [
+        get_option('saml2_organization_locale') => [
             'name' => get_option('saml2_organization_name'),
             'displayname' => get_option('saml2_organization_display_name'),
             'url' => get_option('saml2_organization_url')
-        )
-    ),
-    'contactPerson' => array(
-        'technical' => array(
+        ],
+    ],
+
+    'contactPerson' => [
+        'technical' => [
             'givenName' => get_option('saml2_contact_technical_name'),
-            'emailAddress' => get_option('saml2_contact_technical_email')
-        ),
-        'support' => array(
+            'emailAddress' => get_option('saml2_contact_technical_email'),
+        ],
+        'support' => [
             'givenName' => get_option('saml2_contact_support_name'),
-            'emailAddress' => get_option('saml2_contact_support_email')
-        ),
-    ),
-    'security' => array(
+            'emailAddress' => get_option('saml2_contact_support_email'),
+        ],
+    ],
+
+    'security' => [
         // Indicates that the nameID of the <samlp:logoutRequest> sent by this SP
         // will be encrypted.
         'nameIdEncrypted' => get_option('saml2_nameid_encrypted', false),
@@ -148,7 +153,7 @@ $saml2_settings = [
         // If true, SAMLResponses with an InResponseTo value will be rejectd if not
         // AuthNRequest ID provided to the validation method.
         'rejectUnsolicitedResponsesWithInResponseTo' => get_option('saml2_reject_unsolicited_responses_with_in_response_to', false),
-    ),
+    ],
 ];
 
 // instantiate the Saml2 auth object using the settings array from above
