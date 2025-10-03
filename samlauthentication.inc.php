@@ -45,7 +45,7 @@ function override_default_authentication() {
 
                     <script>
                         $(document).ready(function(){
-                            var loginbox = $(".login-box .well");
+                            var loginbox = $(".login-box .well, .login-card #loginForm .login-input-wrapper");
                             if(loginbox.is(":visible")) {
                                 // we are on the login page
                                 var custom_html = "<style>'.str_replace(["\n", "<br />", "\r"], " ", htmlentities(get_option('saml2_login_button_styles'))).'</style><br /><hr /><br />'.get_option('saml2_login_text', 'Sign-in with SSO').'<br /><a id=\'saml2-login-button\' href=\''.$saml_url.'?sso\' title=\''.get_option('saml2_login_text', 'Sign-in with SSO').'\'>";
